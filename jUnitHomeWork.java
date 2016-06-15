@@ -8,12 +8,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.MarionetteDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-public class jUnitHomeWork {
+public class JUnitHomeWork {
 
     // Create object of interface WebDriver.
     WebDriver driver;
@@ -33,6 +35,7 @@ public class jUnitHomeWork {
 		 */
         driver = new FirefoxDriver();
 
+
         //Maximize window of FF
         driver.manage().window().maximize();
     }
@@ -41,7 +44,7 @@ public class jUnitHomeWork {
     @Test
     public void testJUnitWebDriver() {
         //Open FF and go to https://google.com.ua. Also you can use this variant -> driver.navigate().to("https://google.com.ua");
-        driver.get("https://google.com.ua");
+        driver.get("https://google.com");
 
         //Send request string to the search form
         driver.findElement(By.name("q")).sendKeys("Geeksforless");
@@ -53,7 +56,9 @@ public class jUnitHomeWork {
         //Add results to list
         ArrayList<String> resultsList = new ArrayList<String>();
 
-        for (int i = 1; i < 6; i++) {
+        int iResults = driver.findElements(By.xpath(".//*[@id='rso']/div/div")).size();
+
+        for (int i = 1; i < iResults+1; i++) {
             resultsList.add(driver.findElement(By.xpath(".//*[@id='rso']/div/div["+i+"]/div/h3/a")).getAttribute("href"));
             resultsList.add(driver.findElement(By.xpath("//*[@id='rso']/div/div["+i+"]/div/div/div/span")).getText());
         }
@@ -72,7 +77,7 @@ public class jUnitHomeWork {
 
     //Annotation that sends to JUnit message that this method should be executed AFTER test method
     @After
-    public void tearDown() {
+    public void tearDown() throws IOException, InterruptedException {
         //Close browser and finish work of driver
         driver.quit();
     }
